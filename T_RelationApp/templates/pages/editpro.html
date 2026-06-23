@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Edit Product    
+{% endblock title %}
+
+{% block body %}
+<div class="container mb-3">
+    <h1>Edit Your Product Here</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="label-form">Name</label>
+            <input value="{{ data.name }}" type="text" class="form-control" name="name">
+        </div>
+
+        <div class="mb-3">
+            <label class="label-form">Price</label>
+            <input value="{{ data.price }}" type="number" class="form-control" name="price">
+        </div>
+
+        <div class="mb-3">
+            <label class="label-form">Description</label>
+            <textarea class="form-control" name="description" placeholder="Description">{{ data.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            {% if data.image %}
+                <label class="label-form">Product Image</label><br>
+                <img src="{{ data.image.url }}" width="150px" height="200px" class="img-thumbnail" alt="Image">
+                {% comment %} <br><span><a href="{{ data.image.url }}" target="_blank">View Image</a></span>     {% endcomment %}
+            {% else %}
+                <br><span>No photo Uploaded</span>
+            {% endif %}
+            <br><br>
+            <label class="label-form">Update Image</label>
+            <input type="file" class="form-control" name="image">
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Update Product</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock body %}

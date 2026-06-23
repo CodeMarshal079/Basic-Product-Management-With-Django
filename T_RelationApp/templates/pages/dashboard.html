@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+
+{% block body %}
+<div class="container" style="max-width: 500px;">
+
+    {% for i in p_data %}
+
+        <div class="card mb-3" style="padding: 15px; margin-top: 10px;">
+
+            {% if i.image %}
+                <img src="{{ i.image.url }}" width="200" height="200" alt="{{ i.name }}">
+            {% endif %}
+
+            <h5>{{ i.name }}</h5>
+            <h6>{{ i.category }}</h6>
+            <h4><b>BDT {{ i.price }}</b></h4>
+            <p>{{ i.description }}</p>
+            {% if request.user.user_type == 'admin' %}
+                <a href="{% url 'viewProduct' i.id %}" class="btn btn-info">Order Now</a>
+                <a href="{% url 'editpro' i.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'deletepro' i.id %}" class="btn btn-danger">Delete</a>
+            {% else %}
+                <a href="{% url 'viewProduct' i.id %}" class="btn btn-primary">Order Now</a>
+            {% endif %}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+{% endblock body %}
