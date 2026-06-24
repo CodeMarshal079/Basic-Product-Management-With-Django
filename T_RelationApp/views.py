@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from T_RelationApp.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib import messages
 
 # Register
 def registerPage(request):
@@ -18,7 +18,9 @@ def registerPage(request):
         email_exists =UserModel.objects.filter(email=email).exists()
         
         if user_exists or email_exists:
-            return  HttpResponse('User name/email already exists')
+            messages.error(request,'User name/email already exists')
+            return redirect('register')
+
         if password == confirmpassword:
             UserModel.objects.create_user(
                 username = username,
@@ -27,19 +29,22 @@ def registerPage(request):
                 password=password,
                 user_type=user_type
             ) 
+            messages.success(request,"User Successfully Created")
             return redirect ('login')
     return render (request, 'auth/register.html')
 # Log in
 def loginPage(request):
-    if request.method =="POST":
+    if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-        return redirect('dashboard')
-    return render (request, 'auth/login.html')
+            messages.success(request, "Log in Successfully")
+            return redirect('dashboard')
+        messages.error(request, "Invalid username or password")
+        return redirect('login')
+    return render(request, 'auth/login.html')
 # logout
 
 def logoutPage(request):
